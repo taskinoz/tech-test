@@ -17,7 +17,7 @@ This coding challenge is designed to assess how you approach and solve a problem
 
 ## Requirements
 
-- Provided is a wireframe for a widget we would like you to build (wireframe.png)
+- Provided is a wireframe for a widget we would like you to build (wireframe.jpeg)
 - The data to populate the widget is provided in two .csv files (coding-challnge-api/data)
 - Create an REST api that reads in data from the csv and returns it to the front-end
   in the appropriate format
