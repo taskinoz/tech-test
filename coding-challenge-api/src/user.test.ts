@@ -1,4 +1,4 @@
-import { getUser } from "./index";
+import { getUser } from "./user";
 
 test("getUser returns user details", () => {
   const res = {

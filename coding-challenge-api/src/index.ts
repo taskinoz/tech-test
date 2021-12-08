@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 
 import cors from "cors";
+import { getUser } from "./user";
 
 const app = express();
 const port = 8080;
@@ -15,12 +16,3 @@ app.get("/sales", (req, res) => {
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}`);
 });
-
-export function getUser(req: any, res: any) {
-  res.json({
-    firstName: "Jane",
-    lastName: "Doe",
-    email: "janedoe@email.com",
-    id: 1,
-  });
-}
