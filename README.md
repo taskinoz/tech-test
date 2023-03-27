@@ -22,6 +22,7 @@ This coding challenge is designed to assess how you approach and solve a problem
 - Create an REST api that reads in data from the csv and returns it to the front-end
   in the appropriate format
 - Create the required components on the front-end to match the wireframe
+- Write production quality code and follow best practises for testing
 - Note that the wireframe has an option for sorting, please make sure the implementation reflects this
 - You can use any third party libraries you want to
 - You can refactor the code, both your own and the existing code, as long as it can be run locally with the same commands
