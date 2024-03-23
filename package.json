@@ -1,0 +1,15 @@
+{
+    "name": "coding-challenge",
+    "version": "1.0.0",
+    "description": "Coding Challenge",
+    "scripts": {
+        "start-api": "cd coding-challenge-api && npm run dev",
+        "start-ui": "cd coding-challenge-ui && npm run dev",
+        "start": "concurrently \"npm run start-api\" \"npm run start-ui\"",
+        "setup": "cd coding-challenge-api && npm i && cd \"../coding-challenge-ui\" && npm i && cd .. && npm i && node setup.ts"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2",
+        "gunzip-file": "^0.1.1"
+    }
+}
