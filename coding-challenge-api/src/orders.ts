@@ -54,11 +54,11 @@ export function getOrders (req: any, res: any) {
         res.status(404).json({ error: 'Orders not found' });
     }
 
-    const { limit=10 } = req.query;
+    const { limit=10, sort="asc" } = req.query;
     const lines = orders.split('\n');
     const headers = lines[0].split(',');
-    const requestLimit = limit >= 1 ? parseInt(limit) + 1: 11;
     const filtered = lines.filter((line: any) => line.includes('Pending'));
+    const requestLimit = limit >= 1 ? parseInt(limit) + 1 : 11;
     const ordersData = filtered.slice(1, requestLimit).map((line: any): Order => {
         const order = line.split(/(?!\B"[^"]*),(?![^"]*"\B)/g);
         const store = stores.find((store: Store) => store.id === order[1]);
@@ -75,10 +75,21 @@ export function getOrders (req: any, res: any) {
         }
     });
 
-    res.json(ordersData);
+    const sortedOrders = sortOrders(ordersData, sort);
+
+    res.json(sortedOrders);
 }
 
 export function emojiFlag (country: string) {
     const codePoints = country.toUpperCase().split('').map(char => 127397 + char.charCodeAt(0));
     return String.fromCodePoint(...codePoints);
+}
+
+export function sortOrders (orders: Order[], sort: string) {
+    if (sort === 'asc') {
+        return orders.sort((a:any, b:any) => a.latest_ship_date.valueOf() - b.latest_ship_date.valueOf());
+    } else if (sort === 'desc') {
+        return orders.sort((a:any, b:any) => b.latest_ship_date.valueOf() - a.latest_ship_date.valueOf());
+    }
+    return orders;
 }
