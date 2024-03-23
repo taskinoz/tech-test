@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 import styled from "styled-components";
+import { OrderProps } from "./Components/Order";
+import Sales from "./Components/Sales";
 
 const AppWrapper = styled.div`
   height: 100vh;
@@ -33,6 +35,7 @@ interface User {
 
 const App = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [sales, setSales] = useState<Array<OrderProps> | null>(null);
 
   React.useEffect(() => {
     fetch("http://localhost:8080/user")
@@ -42,13 +45,21 @@ const App = () => {
       });
   }, []);
 
+  React.useEffect(() => {
+    fetch("http://localhost:8080/sales?limit=5")  
+      .then((results) => results.json())
+      .then((data) => {
+        setSales(data);
+      });
+  }, []);
+
   return (
     <AppWrapper>
       <AppHeader>
         <HeaderText>Analytics Dashboard</HeaderText>
         <Username>Welcome, {user ? user.firstName : "Guest"}!</Username>
       </AppHeader>
-      {/** Dashboard - new widgets go here */}
+      <Sales sales={sales} />
     </AppWrapper>
   );
 };
