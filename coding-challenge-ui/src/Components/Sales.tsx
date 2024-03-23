@@ -3,6 +3,7 @@ import React from "react";
 import { OrderProps } from "./Order";
 import Order from "./Order";
 import styled from "styled-components";
+import Pagination from "./Pagination";
 
 interface SalesProps {
     sales: Array<OrderProps> | null;
@@ -11,9 +12,19 @@ interface SalesProps {
 const SalesContainer = styled.div`
     margin: 5% 10%;
     background-color: white;
+    /* overflow-x: scroll; */
     h1 {
         padding: 1rem;
         display: inline-block;
+    }
+    @media screen and (max-width: 1000px){
+        margin: 5% 5%;
+    }
+    @media screen and (max-width: 768px){
+        margin: 5% 2%;
+    }
+    @media screen and (max-width: 576px){
+        margin: 5% 0%;
     }
 `;
 
@@ -36,6 +47,7 @@ const OrderTitle = styled.thead`
 const Sales = ({
     sales
 }: SalesProps) => {
+
     return (
         <SalesContainer>
             <h1>Overdue Orders</h1>
@@ -57,6 +69,10 @@ const Sales = ({
                     ))}
                 </tbody>
             </SalesTable>
+            <Pagination
+                postsPerPage={5}
+                totalPosts={sales?.length}
+            />
         </SalesContainer>
     )
 }
