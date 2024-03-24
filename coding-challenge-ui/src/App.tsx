@@ -36,6 +36,11 @@ interface User {
 const App = () => {
   const [user, setUser] = useState<User | null>(null);
   const [sales, setSales] = useState<Array<OrderProps> | null>(null);
+  const [limit, setLimit] = useState<number>(5);
+  const [page, setPage] = useState<number>(1);
+  const [sort, setSort] = useState<string>("asc");
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
 
   React.useEffect(() => {
     fetch("http://localhost:8080/user")
@@ -46,12 +51,40 @@ const App = () => {
   }, []);
 
   React.useEffect(() => {
-    fetch("http://localhost:8080/sales?limit=5")  
+    setLoading(true);
+    fetch(`http://localhost:8080/sales?limit=${limit}&page=${page}&sort=${sort}`)  
       .then((results) => results.json())
       .then((data) => {
-        setSales(data);
+        setSales(data.data);
+        setPage(data.current_page);
+        setTotalPages(data.total);
+        setLoading(false);
       });
-  }, []);
+  }, [limit, sort, page]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleLimitChange = (newLimit: number) => {
+    setLimit(newLimit);
+  }
+
+  const handleSortChange = (newSort: string) => {
+    setSort(newSort);
+  }
+
+  const salesProps = {
+    sales,
+    limit,
+    page,
+    totalPages,
+    sort,
+    handlePageChange,
+    handleLimitChange,
+    handleSortChange,
+    loading,
+  };
 
   return (
     <AppWrapper>
@@ -59,7 +92,7 @@ const App = () => {
         <HeaderText>Analytics Dashboard</HeaderText>
         <Username>Welcome, {user ? user.firstName : "Guest"}!</Username>
       </AppHeader>
-      <Sales sales={sales} />
+      <Sales {...salesProps} />
     </AppWrapper>
   );
 };
