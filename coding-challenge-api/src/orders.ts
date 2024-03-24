@@ -54,12 +54,16 @@ export function getOrders (req: any, res: any) {
         res.status(404).json({ error: 'Orders not found' });
     }
 
-    const { limit=10, sort="asc" } = req.query;
+    const { limit=10, sort="asc", page=1 } = req.query;
+    const plimit:number = parseInt(limit as string);
+    const ppage:number = parseInt(page as string);
     const lines = orders.split('\n');
     const headers = lines[0].split(',');
     const filtered = lines.filter((line: any) => line.includes('Pending'));
-    const requestLimit = limit >= 1 ? parseInt(limit) + 1 : 11;
-    const ordersData = filtered.slice(1, requestLimit).map((line: any): Order => {
+    const requestLimit = plimit >= 1 ? plimit + 1 : 11;    
+    const ordersData = filtered.slice(
+        ppage > 1 ? (ppage-1)*requestLimit: 1 , requestLimit*ppage
+    ).map((line: any): Order => {
         const order = line.split(/(?!\B"[^"]*),(?![^"]*"\B)/g);
         const store = stores.find((store: Store) => store.id === order[1]);
         return {
@@ -77,7 +81,13 @@ export function getOrders (req: any, res: any) {
 
     const sortedOrders = sortOrders(ordersData, sort);
 
-    res.json(sortedOrders);
+    const pages = Math.ceil(filtered.length/requestLimit)
+
+    res.json({
+        data: sortedOrders,
+        current_page: ppage,
+        total: pages,
+    });
 }
 
 export function emojiFlag (country: string) {
