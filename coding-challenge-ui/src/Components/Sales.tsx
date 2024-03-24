@@ -4,9 +4,19 @@ import { OrderProps } from "./Order";
 import Order from "./Order";
 import styled from "styled-components";
 import Pagination from "./Pagination";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
 interface SalesProps {
     sales: Array<OrderProps> | null;
+    limit: number;
+    page: number;
+    totalPages: number;
+    sort: string;
+    handlePageChange: (newPage: number) => void;
+    handleLimitChange: (newLimit: number) => void;
+    handleSortChange: (newSort: string) => void;
+    loading: boolean;
 }
 
 const SalesContainer = styled.div`
@@ -44,9 +54,35 @@ const OrderTitle = styled.thead`
     }
 `;
 
+const Sort = styled.th`
+    display: inline-block;
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+`;
+
+const Loading = styled.tr`
+    td {
+        height: 100px;
+        text-align: center;
+    }
+`;
+
 const Sales = ({
-    sales
+    sales,
+    limit,
+    page,
+    totalPages,
+    sort,
+    handlePageChange,
+    handleLimitChange,
+    handleSortChange,
+    loading,
 }: SalesProps) => {
+    const changeSort = () => handleSortChange(sort === "asc" ? "desc" : "asc");
+    const sortIcon = sort === "asc" ? <FontAwesomeIcon icon={faArrowUp} /> : <FontAwesomeIcon icon={faArrowDown} />;
 
     return (
         <SalesContainer>
@@ -60,18 +96,20 @@ const Sales = ({
                         <th>Order Value</th>
                         <th>Items</th>
                         <th>Destination</th>
-                        <th>Days Oerdue</th>
+                        <Sort>Days Oerdue <button onClick={changeSort}>{sortIcon}</button></Sort>
                     </tr>
                 </OrderTitle>
                 <tbody>
-                    {sales && sales.map((order) => (
+                    {!loading && sales && sales.map((order) => (
                         <Order {...order} />
                     ))}
+                    {loading && <Loading><td colSpan={7}>Loading...</td></Loading>}
                 </tbody>
             </SalesTable>
             <Pagination
-                postsPerPage={5}
-                totalPosts={sales?.length}
+                currentPage={page}
+                totalPages={totalPages}
+                handlePageChange={handlePageChange}
             />
         </SalesContainer>
     )
