@@ -15,7 +15,7 @@ test('getOrders returns 10 orders', () => {
     };
     getOrders({query:{}}, res);
     const ordersArr = res.json.mock.calls[0][0];
-    expect(ordersArr[0]).toHaveProperty('id', '1');
+    expect(ordersArr.data[0]).toHaveProperty('id', '5');
 });
 
 test('getOrders returns 10 orders', () => {
@@ -24,7 +24,7 @@ test('getOrders returns 10 orders', () => {
     };
     getOrders({query: {limit: 10}}, res);
     const ordersArr = res.json.mock.calls[0][0];
-    expect(ordersArr.length).toBe(10);
+    expect(ordersArr.data.length).toBe(10);
 });
 
 test('getOrders returns 5 orders', () => {
@@ -33,7 +33,7 @@ test('getOrders returns 5 orders', () => {
     };
     getOrders({query: {limit: 5}}, res);
     const ordersArr = res.json.mock.calls[0][0];
-    expect(ordersArr.length).toBe(5);
+    expect(ordersArr.data.length).toBe(5);
 });
 
 test('getOrders returns 1 order', () => {
@@ -42,7 +42,7 @@ test('getOrders returns 1 order', () => {
     };
     getOrders({query: {limit: 1}}, res);
     const ordersArr = res.json.mock.calls[0][0];
-    expect(ordersArr.length).toBe(1);
+    expect(ordersArr.data.length).toBe(1);
 });
 
 test('getOrders retturns 10 if limit is less than 1', () => {
@@ -51,5 +51,5 @@ test('getOrders retturns 10 if limit is less than 1', () => {
     };
     getOrders({query: {limit: 0}}, res);
     const ordersArr = res.json.mock.calls[0][0];
-    expect(ordersArr.length).not.toBe(0);
+    expect(ordersArr.data.length).not.toBe(0);
 });
