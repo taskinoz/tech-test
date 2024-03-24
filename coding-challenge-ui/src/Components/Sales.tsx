@@ -5,7 +5,7 @@ import Order from "./Order";
 import styled from "styled-components";
 import Pagination from "./Pagination";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown, faArrowUp, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 interface SalesProps {
     sales: Array<OrderProps> | null;
@@ -65,7 +65,7 @@ const Sort = styled.th`
 
 const Loading = styled.tr`
     td {
-        height: 100px;
+        height: 300px;
         text-align: center;
     }
 `;
@@ -103,7 +103,7 @@ const Sales = ({
                     {!loading && sales && sales.map((order) => (
                         <Order {...order} />
                     ))}
-                    {loading && <Loading><td colSpan={7}>Loading...</td></Loading>}
+                    {loading && <Loading><td colSpan={7}><FontAwesomeIcon className="fa-spin" size="3x" icon={faSpinner} /></td></Loading>}
                 </tbody>
             </SalesTable>
             <Pagination
